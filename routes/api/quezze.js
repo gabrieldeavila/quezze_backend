@@ -40,6 +40,8 @@ router.get("/", auth.optional, function (req, res, next) {
   var limit = 20;
   var offset = 0;
 
+  console.log("aqui?");
+
   if (typeof req.query.limit !== "undefined") {
     limit = req.query.limit;
   }
