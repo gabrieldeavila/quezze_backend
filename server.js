@@ -21,10 +21,6 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
       console.log("listening on 5000");
     });
 
-    app.get("/", (req, res) => {
-      res.send("Hello World");
-    });
-
     app.post("/quezze", jsonParser, (req, res) => {
       quizzCollection
         .insertOne(req.body)
@@ -34,6 +30,19 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
         .catch((error) => console.error(error));
 
       res.send(req.body);
+    });
+
+    app.post("/get-quezze", jsonParser, (req, res) => {
+      db.collection("quizz")
+        .find()
+        .toArray()
+        .then((results) => {
+          let filteredValues = results.filter((result) => {
+            return result.create.type === req.body.value;
+          });
+
+          res.send(filteredValues);
+        });
     });
   })
   .catch((error) => console.error(error));
